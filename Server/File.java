@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-
+//this is the fileClass
 public class File implements CacheManager {
 
 	java.io.File _f;
