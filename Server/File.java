@@ -1,8 +1,10 @@
 package Server;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 //this is the fileClass
 public class File implements CacheManager {
@@ -26,8 +28,9 @@ public class File implements CacheManager {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			return _solution;	
 		}
-		return _solution;
+		return null;
 	}
 	
 	private String readFile(String file) throws IOException {
@@ -49,9 +52,18 @@ public class File implements CacheManager {
 	}
 
 	@Override
-	public void save(String problem) {
-		// TODO Auto-generated method stub
-
+	public void save(String hash,String solution) {
+		try {
+			_f = new java.io.File(hash+".txt");
+			_f.createNewFile();
+			BufferedWriter writer = new BufferedWriter(new FileWriter(hash+".txt", true));
+			writer.append(solution);
+			writer.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
 	}
 
 	@Override

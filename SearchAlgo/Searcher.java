@@ -1,5 +1,7 @@
 package SearchAlgo;
 
-public interface Searcher {
+public interface Searcher<T>{
+	
+	public String solve(State<T> problem);
 	
 }

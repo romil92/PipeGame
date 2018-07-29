@@ -10,6 +10,11 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+
+import SearchAlgo.BFS;
+import SearchAlgo.PipeGameState;
+import SearchAlgo.Searcher;
+
 import java.security.*;
 
 
@@ -29,6 +34,8 @@ public class MyCHandler implements ClientHandler {
 		String test = "";
 		ArrayList<String> list = new ArrayList<String>();
 		
+		
+		
 		try {
 			while(!test.equals("done")) 
 			{
@@ -41,10 +48,7 @@ public class MyCHandler implements ClientHandler {
 			e.printStackTrace();
 		}
 		
-
-	
-		
-		/*		
+				
 
 		int row = list.size() - 1;
 		int col = list.get(0).length();
@@ -57,6 +61,7 @@ public class MyCHandler implements ClientHandler {
 	//normalized class	
 		for(int i = 0; i < row; i++) {
 			normalMat[i]="";
+			
 			for(int j = 0; j < col; j++) {
 
 				
@@ -91,64 +96,74 @@ public class MyCHandler implements ClientHandler {
 				}
 				else if(tmp == 'g' || tmp == 'G') {
 					moveMat[i][j] = 0; 
-					normalMat[i] = normalMat[i] + "s";
+					normalMat[i] = normalMat[i] + "g";
 				}
 				else {
 					moveMat[i][j] = 0; 
 					normalMat[i] = normalMat[i] + "0";
 				}
 			}
-		}*/
+		}
 		
-		/*
+		
 		Integer hash = 0;
 		for(String s: normalMat) {
 			hash += s.hashCode();
 		}
-		*/
+		
 		
 		File cm = new File();
 		String _Solution = cm.checkForSolve(hash);
 		System.out.println(_Solution);//chek
-		if(!_Solution.equals(null)) {
 		String FixedSol = "";
 		Integer rowSol=0,colSol=0,turns=0,rotation=0;
-
+		if(_Solution==null) {
 		
-		for(int i = 0; i < _Solution.length()-5; i += 6) {
-			rowSol = Character.getNumericValue(_Solution.charAt(i));
-			colSol = Character.getNumericValue(_Solution.charAt(i+2));
-			turns = Character.getNumericValue(_Solution.charAt(i+4));
-						//in normalizer
-			if(normalMat[rowSol].charAt(colSol) == 'L') {
-				rotation = ((turns.intValue() + moveMat[rowSol][colSol]) % 4);
-			}
-			else if(normalMat[rowSol].charAt(colSol) == '-') {
-				rotation = ((turns.intValue() + moveMat[rowSol][colSol]) % 2);
-			}
-			else {
-				rotation = 0;
+			ArrayList<String> normalized=new ArrayList<String>();
+			for(String s : normalMat) {
+				normalized.add(s);
 			}
 			
-			FixedSol = (rowSol.toString() + "," + colSol.toString() + "," + rotation.toString());
-			
-			try {
-				outTC.write(FixedSol);
-				outTC.newLine();
-			} catch (IOException e) {
-				
-				e.printStackTrace();
-			}	
+			PipeGameState<String> state=new PipeGameState<String>(normalized);
+			System.out.println(normalized);
+			Searcher<String> bfs=new BFS<String>();//-------add another algorithms---------//
+			_Solution= bfs.solve(state);
+			cm.save(hash.toString(), _Solution);
+		
+	}
+	for(int i = 0; i < _Solution.length()-5; i += 6) {
+		rowSol = Character.getNumericValue(_Solution.charAt(i));
+		colSol = Character.getNumericValue(_Solution.charAt(i+2));
+		turns = Character.getNumericValue(_Solution.charAt(i+4));
+					//in normalizer
+		if(normalMat[rowSol].charAt(colSol) == 'L') {
+			rotation = ((turns.intValue() + moveMat[rowSol][colSol]) % 4);
 		}
-
+		else if(normalMat[rowSol].charAt(colSol) == '-') {
+			rotation = ((turns.intValue() + moveMat[rowSol][colSol]) % 2);
+		}
+		else {
+			rotation = 0;
+		}
+		
+		FixedSol = (rowSol.toString() + "," + colSol.toString() + "," + rotation.toString());
+		
 		try {
-			outTC.write("done");
-			outTC.flush();
+			outTC.write(FixedSol);
+			outTC.newLine();
 		} catch (IOException e) {
 			
 			e.printStackTrace();
-		}
+		}	
+	}
+
+	try {
+		outTC.write("done");
+		outTC.flush();
+	} catch (IOException e) {
 		
-		}
+		e.printStackTrace();
+	}
+	
 	}
 }

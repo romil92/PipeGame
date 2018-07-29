@@ -11,7 +11,7 @@ public class RunTest {
 
 //        Server s = new MyServer(Integer.parseInt(args[0]));//Take the port from the args
         try {
-            Server s = new MyServer(6402);//Take the port from the args
+            Server s = new MyServer(6403);//Take the port from the args
 
         	s.start(new MyCHandler());
         	System.in.read();

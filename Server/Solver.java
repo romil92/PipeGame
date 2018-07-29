@@ -1,5 +1,10 @@
 package Server;
 
+import SearchAlgo.State;
+
 public interface Solver<T> {
-	public String solve(Searchable <T> searchable);
+	public String solve(State <T> searchable);
+	
+	
+	
 }
