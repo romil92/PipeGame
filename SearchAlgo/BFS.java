@@ -1,10 +1,11 @@
 package SearchAlgo;
 
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.ArrayList;
 
 public class BFS<T> implements Searcher<T> {
-		private ArrayList<State<T>> _open;
+		private LinkedList<State<T>> _open;
 		private HashSet<State<T>> _closed;
 	
 	public BFS() {
@@ -14,14 +15,13 @@ public class BFS<T> implements Searcher<T> {
 
 	@Override
 	public String solve(State<T> problem) {
-	_open=new ArrayList<State<T>>();	
 	_closed=new HashSet<State<T>>();
-	
+	_open=new LinkedList<State<T>>();
 	_open.add(problem);
 	State<T> temp;
 	
 	while(!_open.isEmpty()) {
-		temp=_open.remove(0);
+		temp=_open.remove();
 		_closed.add(temp);
 		if(temp.isGoal()) {
 		return temp.getSolution();
@@ -29,13 +29,14 @@ public class BFS<T> implements Searcher<T> {
 		}
 		ArrayList<State<T>> tempChild=temp.getNeighbors();
 		while(!tempChild.isEmpty()) {
+		//	System.out.println(temp.getLocation().getIndex());
 			temp=tempChild.remove(0);
 			if(!_closed.contains(temp)) {
 				_open.add(temp);
 			}
 			
 		}
-		
+		//System.out.println( "childs");
 		
 	}
 	return null;

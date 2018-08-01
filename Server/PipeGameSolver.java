@@ -15,7 +15,6 @@ public class PipeGameSolver<T> implements Solver<T> {
 
 	@Override
 	public String solve(State<T> problem) {
-		
 		return _algorithm.solve(problem);
 	}
 

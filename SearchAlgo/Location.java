@@ -18,5 +18,9 @@ Integer _row;
 	public String getIndex() { 
 		return _row.toString()+","+_col.toString();
 	}
-
+	public boolean equals(Location arg0) {
+		if(_col==arg0._col&&_row==arg0._row)
+			return true;
+		return false;
+	}
 }

@@ -22,7 +22,7 @@ public class MyServer implements Server{
 		//open socket
 		_serverSocket=new ServerSocket(_port);
 		_serverSocket.setSoTimeout(1000);
-		System.out.println("server connected - waiting for client");
+		//System.out.println("server connected - waiting for client");
 		
 		while(!_stop) {
 			

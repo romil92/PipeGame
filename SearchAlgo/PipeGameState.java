@@ -1,19 +1,31 @@
 package SearchAlgo;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class PipeGameState<T> extends MyState<T> {
-
+	protected StateComperator<T> _comp;
+	
 	public PipeGameState(ArrayList<T> matrix, Location loc, State<T> father, Integer rotation, Integer uristicNum) {
 		super(matrix, loc, father, rotation, uristicNum);
+		_comp=new StateComperator<>();
 		// TODO Auto-generated constructor stub
 	}
 
 	public PipeGameState(ArrayList<T> matrix) {
 		super(matrix);
+		_comp=new StateComperator<>();
 		// TODO Auto-generated constructor stub
 	}
 
+	
+	public int getManhDistance(Location l) {
+		return super.getManhDistance(l);
+	}
+	
+	public Location getGoal() {
+		return super.getGoal();
+	}
 	@Override//TODO if d'ont work change return value to PipeGameState
 	public ArrayList<State<T>> getNeighbors() {
 		ArrayList<State<T>> neighbors= new ArrayList<State<T>>();
@@ -35,15 +47,15 @@ public class PipeGameState<T> extends MyState<T> {
 				char up=this._matrix.get(_loc.getRow()-1).toString().charAt(_loc.getCol());
 				if(!_track.contains(newLocation.getIndex())) {
 					if(up=='L') {
-						nList.add(new PipeGameState<T>(_matrix, newLocation, this,1, 0));
-						nList.add(new PipeGameState<T>(_matrix, newLocation, this,2, 0));
+						nList.add(new PipeGameState<T>(_matrix, newLocation, this,1, getManhDistance(newLocation)));
+						nList.add(new PipeGameState<T>(_matrix, newLocation, this,2, getManhDistance(newLocation)));
 			
 					}
 					if(up=='-') {
-						nList.add(new PipeGameState<T>(_matrix, newLocation, this,1, 0));
+						nList.add(new PipeGameState<T>(_matrix, newLocation, this,1, getManhDistance(newLocation)));
 					}
 					if(up=='g') {
-						nList.add(new PipeGameState<T>(_matrix, newLocation, this,0, 0));
+						nList.add(new PipeGameState<T>(_matrix, newLocation, this,0, getManhDistance(newLocation)));
 					}
 				}
 			
@@ -63,15 +75,15 @@ public class PipeGameState<T> extends MyState<T> {
 					char down=this._matrix.get(_loc.getRow()+1).toString().charAt(_loc.getCol());
 					if(!_track.contains(newLocation.getIndex())) {
 						if(down=='L') {
-							nList.add(new PipeGameState<T>(_matrix, newLocation, this,0, 0));
-							nList.add(new PipeGameState<T>(_matrix, newLocation, this,3, 0));
+							nList.add(new PipeGameState<T>(_matrix, newLocation, this,0, getManhDistance(newLocation)));
+							nList.add(new PipeGameState<T>(_matrix, newLocation, this,3, getManhDistance(newLocation)));
 				
 						}
 						if(down=='-') {
-							nList.add(new PipeGameState<T>(_matrix, newLocation, this,1, 0));
+							nList.add(new PipeGameState<T>(_matrix, newLocation, this,1, getManhDistance(newLocation)));
 						}
 						if(down=='g') {
-							nList.add(new PipeGameState<T>(_matrix, newLocation, this,0, 0));
+							nList.add(new PipeGameState<T>(_matrix, newLocation, this,0, getManhDistance(newLocation)));
 					}
 				
 				}
@@ -92,15 +104,15 @@ public class PipeGameState<T> extends MyState<T> {
 					char right=this._matrix.get(_loc.getRow()).toString().charAt(_loc.getCol()+1);
 					if(!_track.contains(newLocation.getIndex())) {
 						if(right=='L') {
-							nList.add(new PipeGameState<T>(_matrix, newLocation, this,2, 0));
-							nList.add(new PipeGameState<T>(_matrix, newLocation, this,3, 0));
+							nList.add(new PipeGameState<T>(_matrix, newLocation, this,2, getManhDistance(newLocation)));
+							nList.add(new PipeGameState<T>(_matrix, newLocation, this,3, getManhDistance(newLocation)));
 			
 						}
 						if(right=='-') {
-							nList.add(new PipeGameState<T>(_matrix, newLocation, this,0, 0));
+							nList.add(new PipeGameState<T>(_matrix, newLocation, this,0, getManhDistance(newLocation)));
 						}
 						if(right=='g') {
-							nList.add(new PipeGameState<T>(_matrix, newLocation, this,0, 0));
+							nList.add(new PipeGameState<T>(_matrix, newLocation, this,0, getManhDistance(newLocation)));
 						}
 						
 				}
@@ -123,15 +135,15 @@ public class PipeGameState<T> extends MyState<T> {
 				char left=this._matrix.get(_loc.getRow()).toString().charAt(_loc.getCol()-1);
 				if(!_track.contains(newLocation.getIndex())) {
 					if(left=='L') {
-						nList.add(new PipeGameState<T>(_matrix, newLocation, this,0, 0));
-						nList.add(new PipeGameState<T>(_matrix, newLocation, this,1, 0));
+						nList.add(new PipeGameState<T>(_matrix, newLocation, this,0, getManhDistance(newLocation)));
+						nList.add(new PipeGameState<T>(_matrix, newLocation, this,1, getManhDistance(newLocation)));
 			
 					}
 					if(left=='-') {
-						nList.add(new PipeGameState<T>(_matrix, newLocation, this,0, 0));
+						nList.add(new PipeGameState<T>(_matrix, newLocation, this,0, getManhDistance(newLocation)));
 					}
 					if(left=='g') {
-						nList.add(new PipeGameState<T>(_matrix, newLocation, this,0, 0));
+						nList.add(new PipeGameState<T>(_matrix, newLocation, this,0, getManhDistance(newLocation)));
 					}
 			
 				}
@@ -146,12 +158,26 @@ public class PipeGameState<T> extends MyState<T> {
 		String solution=new String();
 		solution="";
 		PipeGameState<T> temp=this;
-		System.out.println("get sol");
 		while(temp!=null) {
 			solution+=temp.getLocation().getIndex()+","+temp.getRotation().toString()+",";
 			temp=(PipeGameState<T>) temp.getCameFromState();
 		}
 		return solution;
 	}
+
+	@Override
+	public Comparator<? super State<T>> getComp() {
+		// TODO Auto-generated method stub
+		return _comp;
+	}
+
+	@Override
+	public int compareTo(State<T> arg0) {
+		 return _uristicNum-arg0.getUristicNum()-_uristicNum;
+	}
+
+	
+	
+
 	
 }
